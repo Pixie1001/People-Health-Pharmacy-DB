@@ -4,14 +4,6 @@
 
 //var array[];
 
-// var o = {
-  // 'a': 3, 'b': 4,
-  // 'doStuff': function() {
-    // alert(this.a + this.b);
-  // }
-// };
-// o.doStuff(); // displays: 7
-
 function tuple (name, id, category, price, stock) {
 	this.name = name;
 	this.id = id;
@@ -29,16 +21,63 @@ function QueryStock() {
 	}
 	*/
 	
-	//Read database entry into tuple
-	tuple('Fungle Cream', 'FC', 'Creams', 30, 12);
+	var query = document.getElementsByTagName("input")[0].value;
 	
-	//Load tables
-	var tblRow = document.createElement("tr");
-	var tdName = document.createElement("td");
-	var tdId = document.createElement("td");
-	var tdCategory = document.createElement("td");
-	var tdPrice = document.createElement("td");
-	var tdStock = document.createElement("td");
+	//Read database entry in as tuples
+	if (query == 't') {
+		var tuples = [
+			new tuple('Jazz Cream', 'FC', 'Creams', 30, 12),
+			new tuple('The miracle of childbirth', 'CB', 'Miracle', 40, 9)
+		];
+	}
+	else {
+	var tuples = [
+		new tuple('Fungle Cream', 'FC', 'Creams', 30, 12),
+		new tuple('Hand Cream', 'HC', 'Creams', 40, 9)
+	];
+	}
+	
+	//Load tuples into HTML
+	var tblStock = document.getElementById('stock_list');
+	var StockRowList = document.getElementsByClassName('StockRow');
+	
+	for (var i = StockRowList.length - 1; i >= 0 ; i--) {
+		StockRowList[i].remove();
+	}
+	
+	for (var i = 0; i < tuples.length; i++) {
+		var trRow = document.createElement('tr');
+		var tdName = document.createElement('td');
+		var tdId = document.createElement('td');
+		var tdCategory = document.createElement('td');
+		var tdPrice = document.createElement('td');
+		var tdStock = document.createElement('td');
+		var tdQuantity = document.createElement('td');
+		var inpQuantity = document.createElement('input');
+		
+		var rowNum = 'row_' + i;
+		trRow.setAttribute('id', rowNum);
+		trRow.setAttribute('class', 'StockRow');
+		
+		tdName.innerHTML = tuples[i].name;
+		tdId.innerHTML = tuples[i].id;
+		tdCategory.innerHTML = tuples[i].category;
+		tdPrice.innerHTML = tuples[i].price;
+		tdStock.innerHTML = tuples[i].stock;
+		
+		inpQuantity.setAttribute('type', 'text');
+		inpQuantity.setAttribute('style', 'float:right');
+		
+		tblStock.appendChild(trRow);
+		
+		trRow.appendChild(tdName);
+		trRow.appendChild(tdId);
+		trRow.appendChild(tdCategory);
+		trRow.appendChild(tdPrice);
+		trRow.appendChild(tdStock);
+		trRow.appendChild(tdQuantity);
+		tdQuantity.appendChild(inpQuantity);
+	}
 	
 	/*
 	  <tr>

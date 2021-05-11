@@ -46,6 +46,10 @@
     <th>REMAINING STOCK</th>
 	<th><p style="float:right" >QUANTITY</p></th>
   </tr>
+  <?php
+	require_once("settings.php");
+	$conn = @mysqli_connect($host, $user, $pwd);
+  ?>
   <!--
   <tr>
     <td>Fungal Cream</td>
@@ -71,38 +75,38 @@
   
   <div class="rightcolumn">
     <div class="card">
-<h2>SALE</h2>
+		<h2>SALE</h2>
 
-<h3 class="search" >CUSTOMER NAME:</h3>
-<input id="customer_name" class="search" type="text" id="fname" name="fname">
+		<h3 class="search" >CUSTOMER NAME:</h3>
+		<input id="customer_name" class="search" type="text" id="fname" name="fname">
 
-<table>
-  <tr>
-    <th>Name</th>
-    <th>ID</th>
-    <th>CATEGORY</th>
-	<th>PRICE</th>
-    <th>QUANTITY</th>
-	<th></th>
-  </tr>
-  <tr>
-    <td>Fungle Cream</td>
-    <td>FC</td>
-    <td>Creams</td>
-	<td>$30</td>
-	<td>12</td>
-	<td><button class="search" type="button" onclick="alert('you searched something!')"><img src="Rescources/trash.jpg" width="30" height="30"></button></td>
-  </tr>
-    <tr>
-    <td></td>
-    <td></td>
-    <td></td>
-	<td>Total: $360</td>
-	<td></td>
-	<td></td>
-  </tr>
-</table>
-<p><button class="button button1" style="float:right" onclick="alert('Hello world!')">SELL</button></p>
+		<table>
+		  <tr>
+			<th>Name</th>
+			<th>ID</th>
+			<th>CATEGORY</th>
+			<th>PRICE</th>
+			<th>QUANTITY</th>
+			<th></th>
+		  </tr>
+		  <tr>
+			<td>Fungle Cream</td>
+			<td>FC</td>
+			<td>Creams</td>
+			<td>$30</td>
+			<td>12</td>
+			<td><button class="search" type="button" onclick="alert('you searched something!')"><img src="Rescources/trash.jpg" width="30" height="30"></button></td>
+		  </tr>
+			<tr>
+			<td></td>
+			<td></td>
+			<td></td>
+			<td>Total: $360</td>
+			<td></td>
+			<td></td>
+		  </tr>
+		</table>
+		<p><button class="button button1" style="float:right" onclick="alert('Hello world!')">SELL</button></p>
     </div>
   </div>
 </div>
