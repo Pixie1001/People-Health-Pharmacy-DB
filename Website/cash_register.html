@@ -2,6 +2,7 @@
 <html>
 <head>
  <link rel="stylesheet" href="style.css">
+ <script src="js/register.js"></script>
 </head>
 <body>
 
@@ -32,7 +33,7 @@
     <option value="item_id">ID</option>
     <option value="item_category">Category</option>
   </select>
-<button class="search" type="button" onclick="alert('you searched something!')"><img src="Rescources/search.png" width="15" height="15"></button>
+<button class="search" type="button" onclick="QueryStock()"><img src="Rescources/search.png" width="15" height="15"></button>
 
 
 
@@ -45,6 +46,7 @@
     <th>REMAINING STOCK</th>
 	<th><p style="float:right" >QUANTITY</p></th>
   </tr>
+  <!--
   <tr>
     <td>Fungal Cream</td>
     <td>FC</td>
@@ -61,6 +63,7 @@
 	<td>3</td>
 	<td><input type="text"  style="float:right" id="fname" name="fname"></td>
   </tr>
+  -->
 </table>
 <p><button class="button button1" style="float:right" onclick="alert('Hello world!')">ADD</button></p>
     </div>
@@ -71,7 +74,7 @@
 <h2>SALE</h2>
 
 <h3 class="search" >CUSTOMER NAME:</h3>
-<input class="search" type="text" id="fname" name="fname">
+<input id="customer_name" class="search" type="text" id="fname" name="fname">
 
 <table>
   <tr>
