@@ -46,10 +46,26 @@
     <th>REMAINING STOCK</th>
 	<th><p style="float:right" >QUANTITY</p></th>
   </tr>
-  <?php
-	require_once("settings.php");
-	$conn = @mysqli_connect($host, $user, $pwd);
-  ?>
+	  <?php
+	  	//$query = mysql_query("SELECT Name, MATCHFIELD FROM `employes` WHERE `Name` LIKE '%$keyword%' || `Prenom` LIKE '%$keyword%' || `Telephone` LIKE '%$keyword%' || `Telephone2` LIKE '%$keyword%'");
+		require_once("settings.php");
+		$conn = @mysqli_connect($host, $user, $pwd, $dbname);
+		$input = "SELECT * FROM items WHERE itemName LIKE", $words;
+		$output = mysqli_query($conn, "SELECT * FROM items;");
+		$i = 0;
+		while ($row = mysqli_fetch_assoc($output)) {
+			echo "<tr id='tuple_#", $i, "'>";
+			echo "<td>", $row['itemName'], "</td>";
+			echo "<td>", $row['itemID'], "</td>";
+			echo "<td>", $row['itemCategory'], "</td>";
+			echo "<td>", $row['itemPrice'], "</td>";
+			echo "<td>", $row['stock'], "</td>";
+			echo "<td><input type='text' style='float:right' id='fname' name='fname'></td>";
+			echo "</tr>";
+			$i++;
+		}
+	  ?>
+  </tr>
   <!--
   <tr>
     <td>Fungal Cream</td>
