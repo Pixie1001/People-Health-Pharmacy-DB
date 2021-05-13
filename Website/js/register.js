@@ -12,6 +12,23 @@ function tuple (name, id, category, price, stock) {
 	this.stock = stock;
 }
 
+function tuple (row) {
+	var datums = Array.prototype.slice.call(row.querySelectorAll("*"));
+	
+	//var footer = document.getElementsByClassName("footer")[0];
+	//footer.innerHTML = datums[0].innerHTML;
+	
+	this.name = datums[0].innerHTML;
+	this.id = datums[1].innerHTML;
+	this.category = datums[2].innerHTML;
+	this.price = datums[3].innerHTML;
+	this.stock = datums[4].innerHTML;
+	
+	var txtQuantity = Array.prototype.slice.call(datums[5].querySelectorAll("*"));
+	
+	this.quantity = txtQuantity[0].value;
+}
+
 function QueryStock() {
 	/*
 	var query = document.getElementsByTagName("input")[0].value;
@@ -91,46 +108,147 @@ function QueryStock() {
 	*/
 }
 
-function ConfirmPurchase() {
-	
-}
-
-function RemoveItem() {
-	
-}
-
 function AddItems() {
-	
+	var items = document.getElementsByClassName("tuple");
+	var cartItems = document.getElementsByClassName("cartTuple");
+	var tuples = [];
+	var inCart = false;
+	if (items.length > 0) {
+		for (var i = 0; i < items.length; i++) {
+			var tempTuple = new tuple(items[i]);
+			if (tempTuple.quantity == "" || tempTuple.quantity == 0) {
+				//Do not add
+			}
+			else {
+				for (var x = 0; x < cartItems.length; x++) {
+					//var cartId = Array.prototype.slice.call(Array.prototype.slice.call(cartItems[x].querySelectorAll("*"))[5].querySelectorAll("*"))[0].value;
+					var cartId = Array.prototype.slice.call(cartItems[x].querySelectorAll("*"))[1].innerHTML;
+					if (tempTuple.id == cartId) {
+						var quantityField = Array.prototype.slice.call(cartItems[x].querySelectorAll("*"))[4];
+						quantityField.innerHTML = parseInt(tempTuple.quantity) + parseInt(quantityField.innerHTML);
+						inCart = true;
+						
+						if (parseInt(quantityField.innerHTML) <= 0) {
+							RemoveItem(x);
+						}
+						break;
+					}
+				}
+				if (inCart == false) {
+					tuples.push(new tuple(items[i]));
+				}
+			}
+		}
+		
+		var tblStock = document.getElementById('cart');
+
+		for (var i = 0; i < tuples.length; i++) {
+			var trRow = document.createElement('tr');
+			var tdName = document.createElement('td');
+			var tdId = document.createElement('td');
+			var tdCategory = document.createElement('td');
+			var tdPrice = document.createElement('td');
+			var tdQuantity = document.createElement('td');
+			var tdRemove = document.createElement('td');
+			var btnRemove = document.createElement('button');
+			var imgRemove = document.createElement('img');
+			
+			//var rowNum = 'row_' + i;
+			//trRow.setAttribute('id', rowNum);
+			trRow.setAttribute('class', 'cartTuple');
+			
+			//Format remove button
+			var numTuples = document.getElementsByClassName("cartTuple");
+			btnRemove.setAttribute('class', 'search');
+			btnRemove.setAttribute('type', 'button');
+			btnRemove.setAttribute('onclick', 'RemoveItem(' + numTuples.length + ')');
+			
+			//Format remove icon
+			imgRemove.setAttribute('src', 'Rescources/trash.jpg');
+			imgRemove.setAttribute('width', '30');
+			imgRemove.setAttribute('height', '30');
+			
+			tdName.innerHTML = tuples[i].name;
+			tdId.innerHTML = tuples[i].id;
+			tdCategory.innerHTML = tuples[i].category;
+			tdPrice.innerHTML = tuples[i].price;
+			tdQuantity.innerHTML = tuples[i].quantity;
+			tdRemove.appendChild(btnRemove);
+			
+			tblStock.appendChild(trRow);
+			
+			trRow.appendChild(tdName);
+			trRow.appendChild(tdId);
+			trRow.appendChild(tdCategory);
+			trRow.appendChild(tdPrice);
+			trRow.appendChild(tdQuantity);
+			trRow.appendChild(tdRemove);
+			tdRemove.appendChild(btnRemove);
+			btnRemove.appendChild(imgRemove);
+		}
+		CalculateTotal();
+		for (var i = 0; i < items.length; i++) {
+			Array.prototype.slice.call(Array.prototype.slice.call(items[i].querySelectorAll("*"))[5].querySelectorAll("*"))[0].value = "";
+		}
+	}
 }
 
-function init() {
-	//Handles events on the apply.html and jobs.html pages.
-	
-	// if (document.getElementById("apply_page") != null) {
-		// //element variables
-		// var applyForm = document.getElementById("applyForm");
-		// var drpPosition = document.getElementById("position");
-		
-		// //Update the form with previously stored data
-		// fillForm();
-		
-		// //update job info when the job is changed via the position element
-		// drpPosition.onchange = updatePosition;
-		// //Validate the inputted data when the submit button is clicked
-		// applyForm.onsubmit = validate;
-	// }
-	// else if (document.getElementById("jobs_page") != null) {
-		// //element variables
-		// var btnJavaDeveloper = document.getElementById("appJavaDeveloper");
-		// var btnLeadProgrammer = document.getElementById("appLeadProgrammer");
-		
-		// //Handles job application when either of the 2 apply buttons are clicked
-		// btnJavaDeveloper.onclick = function() {applyForJob(btnJavaDeveloper)};
-		// btnLeadProgrammer.onclick = function() {applyForJob(btnLeadProgrammer)};
-	// }
+function ConfirmPurchase() {
+	var tblStock = document.getElementById('cart');
+	var divOutput = document.createElement('div');
+	var inpValid = document.createElement('input');
+	var testField = document.createElement('input');
+	divOutput.setAttribute('id', 'sellOutput');
+	divOutput.setAttribute('hidden', 'true');
+	inpValid.setAttribute('name', 'validSale');
+	inpValid.setAttribute('value', 'true');
+	testField.setAttribute('name', 'test');
+	testField.setAttribute('value', 'JavaScript is MAGICCCCcccc');
 	
 	
+	tblStock.appendChild(divOutput);
+	divOutput.appendChild(inpValid);
+	divOutput.appendChild(testField);
+}
+
+function RemoveItem(index) {
+	var cartItems = document.getElementsByClassName('cartTuple');
+	cartItems[index].remove();
+	cartItems = document.getElementsByClassName('cartTuple');
 	
+	//Adjust indexes of remaining tuples
+	for (var i = 0; i < cartItems.length; i++) {
+		Array.prototype.slice.call(Array.prototype.slice.call(cartItems[i].querySelectorAll("*"))[5].querySelectorAll("*"))[0].setAttribute('onClick', 'RemoveItem(' + i + ')');
+	}
+	CalculateTotal();
+}
+
+function CalculateTotal() {
+	var tblStock = document.getElementById('cart');
+	var cartItems = document.getElementsByClassName('cartTuple');
+	var trTotal = document.getElementById('totalPrice');
+	trTotal.remove();
+	
+	trTotal = document.createElement('tr');
+	trTotal.setAttribute('id', 'totalPrice');
+	var tdsTotal = [document.createElement('td'), document.createElement('td'), document.createElement('td'), document.createElement('td'), document.createElement('td'), document.createElement('td')];
+	var totalPrice = 0;
+	
+	for (var i = 0; i < cartItems.length; i++) {
+		totalPrice += parseFloat(Array.prototype.slice.call(cartItems[i].querySelectorAll("*"))[3].innerHTML) *
+		parseFloat(Array.prototype.slice.call(cartItems[i].querySelectorAll("*"))[4].innerHTML);
+	}
+	
+	tdsTotal[3].innerHTML = '<strong>Total: $' + totalPrice.toFixed(2) + "</strong>";
+	
+	for (var i = 0; i < tdsTotal.length; i++) {
+		trTotal.appendChild(tdsTotal[i]);
+	}
+	
+	tblStock.appendChild(trTotal);
+}
+
+function init() {	
 	//var btnSearch = document.getElementById("searchButton");
 	//btnSearch.onclick = function() {QueryStock()};
 }
