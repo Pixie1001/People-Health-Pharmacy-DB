@@ -90,10 +90,10 @@
   
   <div class="rightcolumn">
     <div class="card">
-		<form method="post">
+		<form method="post" onsubmit="return ConfirmPurchase()">
 			<h2>SALE</h2>
 			<h3 class="search" >CUSTOMER NAME:</h3>
-			<input id="customer_name" class="search" type="text" id="fname" name="fname">
+			<input id="customer_name" class="search" type="text" name="custName">
 			<table id="cart">
 				<tr>
 					<th>Name</th>
@@ -112,7 +112,7 @@
 					<td></td>
 				</tr>
 			</table>
-			<p><button class="button button1" name="btnSell" type="submit" value="sell" style="float:right" onclick="ConfirmPurchase()">SELL</button></p>
+			<p><button class="button button1" name="btnSell" type="submit" value="sell" style="float:right">SELL</button></p>
 		</form>
     </div>
   </div>
@@ -121,23 +121,52 @@
 <?php
 	//Add second field that confirms that input is valid
 	if(isset($_POST['btnSell']) && isset($_POST['validSale'])) {
-		echo "<p>Post detected</p>";
+		//echo "<p>Post detected</p>";
 		Sell();
 	}
 	
+	// if(isset($_POST['btnSell'])) {
+		// echo "<p>Simplied post detected</p>";
+		// //Sell();
+	// }
+	
 	function Sell() {
-		// $doc = new DOMDocument();
-		// $doc->loadHTMLFile("cash_register.php");
-		// $name = 
-		// $div = $dochtml->getElementById('div2')->nodeValue;
-		if (isset($_POST['test'])) {
-			$name = $_POST['test'];
-			echo "<p>", $name, "<p/>";
-		}
-		else {
-			echo "<p>Test failed :(<p/>";
+		//Read in post results as a MySQL add record query for every row.
+		//Send cusName, ID, single price, quantity and current date
+		//Generate a recipte number (check the db for
+		date_default_timezone_set('Australia/Melbourne');
+		$date = date('y/m/d', time());
+		$customerName = $_POST['custName'];
+		
+		require_once("settings.php");
+		$conn = @mysqli_connect($host, $user, $pwd, $dbname);
+		
+		$query = "INSERT INTO receipts (customerName, orderDate) VALUES
+		('$customerName', '$date');";
+		
+		mysqli_query($conn, $query);
+		//echo "<p>", $query, "</p>";
+		
+		$query = "SELECT receiptID FROM receipts
+		ORDER BY receiptID DESC LIMIT 1;";
+		
+		$output = mysqli_query($conn, $query);
+		$receiptID = mysqli_fetch_assoc($output)['receiptID'];
+		//echo "<p>", $query, "</p>";
+		
+		for ($i = 0; $i < $_POST['txtLength'] + 0; $i++) {
+			
+			$id = $_POST["id_" . $i];
+			$quantity = $_POST['quantity_' . $i];
+			$price = $_POST['price_' . $i];
+			
+			$query = "INSERT INTO purchases (receiptID, itemID, quantity, price) VALUES
+			($receiptID, $id, $quantity, $price);";
+			
+			mysqli_query($conn, $query);
 		}
 		
+		mysqli_query($conn, 'COMMIT;');
 		//Process sell
 	}
 ?>

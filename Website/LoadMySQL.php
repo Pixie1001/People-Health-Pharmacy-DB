@@ -32,17 +32,24 @@
 	
 	mysqli_query($conn, $input);
 	
+	$input = 'CREATE TABLE receipts  ( 
+		receiptID INT UNSIGNED AUTO_INCREMENT NOT NULL,
+		customerName Varchar(225) NOT NULL,
+		orderDate DATE NOT NULL,
+		PRIMARY KEY (receiptID)
+	);';
+	
+	mysqli_query($conn, $input);
+	
 	$input = 'CREATE TABLE purchases ( 
 		purchaseID INT UNSIGNED AUTO_INCREMENT NOT NULL,
-		receptieNumber INT UNSIGNED NOT NULL,
-		customerName Varchar(225) NOT NULL,
+		receiptID INT UNSIGNED NOT NULL,
 		itemID INT UNSIGNED,
 		quantity INT UNSIGNED NOT NULL,
 		price DECIMAL(10, 2) NOT NULL,
-		orderdate DATE NOT NULL,
-		totalprice DECIMAL(10, 2) NOT NULL,
 		PRIMARY KEY (purchaseID),
-		FOREIGN KEY (itemID) REFERENCES item (itemID)
+		FOREIGN KEY (itemID) REFERENCES items (itemID),
+		FOREIGN KEY (receiptID) REFERENCES receipts  (receiptID)
 	);';
 	
 	mysqli_query($conn, $input);

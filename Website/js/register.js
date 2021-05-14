@@ -29,6 +29,14 @@ function tuple (row) {
 	this.quantity = txtQuantity[0].value;
 }
 
+function saleRecord (row) {
+	var datums = Array.prototype.slice.call(row.querySelectorAll("*"));
+	
+	this.id = datums[1].innerHTML;
+	this.price = datums[3].innerHTML;
+	this.quantity = datums[4].innerHTML;
+}
+
 function QueryStock() {
 	/*
 	var query = document.getElementsByTagName("input")[0].value;
@@ -194,21 +202,65 @@ function AddItems() {
 }
 
 function ConfirmPurchase() {
+	var cartItems = document.getElementsByClassName('cartTuple');
 	var tblStock = document.getElementById('cart');
-	var divOutput = document.createElement('div');
-	var inpValid = document.createElement('input');
-	var testField = document.createElement('input');
+	
+	//Remove output divs from previous purchases
+	var divOutput = document.getElementById('sellOutput');
+	if (divOutput != null) {
+		divOutput.remove();
+	}
+	
+	//Create output div
+	divOutput = document.createElement('div');
 	divOutput.setAttribute('id', 'sellOutput');
 	divOutput.setAttribute('hidden', 'true');
-	inpValid.setAttribute('name', 'validSale');
-	inpValid.setAttribute('value', 'true');
-	testField.setAttribute('name', 'test');
-	testField.setAttribute('value', 'JavaScript is MAGICCCCcccc');
 	
+	var txtName = document.getElementById('customer_name');
+	if (txtName.value == "") {
+		alert("Please enter customer name");
+		return false;
+	}
+	else if (cartItems.length == 0) {
+		alert("Please add one or more items to this order");
+		return false;
+	}
+	else {
+		var inpValid = document.createElement('input');
+		inpValid.setAttribute('name', 'validSale');
+		inpValid.setAttribute('value', 'true');
+		divOutput.appendChild(inpValid);
+	}
+	
+	//read in input boxes to export data to POST
+	for (var i = 0; i < cartItems.length; i++) {
+		var row = new saleRecord(cartItems[i]);
+		var fields = [document.createElement('input'), document.createElement('input'), document.createElement('input')];
+		
+		fields[0].setAttribute("name", "id_" + i);
+		fields[0].setAttribute("value", row.id);
+		
+		fields[1].setAttribute("name", "price_" + i);
+		fields[1].setAttribute("value", row.price);
+		
+		fields[2].setAttribute("name", "quantity_" + i);
+		fields[2].setAttribute("value", row.quantity);
+		
+		divOutput.appendChild(fields[0]);
+		divOutput.appendChild(fields[1]);
+		divOutput.appendChild(fields[2]);
+	}
+	
+	var txtLength = document.createElement('input');
+	txtLength.setAttribute('name', 'txtLength');
+	txtLength.setAttribute('value', cartItems.length);
+	divOutput.appendChild(txtLength);
+	
+	alert(txtLength.value + " / " + cartItems.length);
 	
 	tblStock.appendChild(divOutput);
-	divOutput.appendChild(inpValid);
-	divOutput.appendChild(testField);
+	
+	return true;
 }
 
 function RemoveItem(index) {
