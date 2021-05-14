@@ -11,11 +11,11 @@
 
 <div class="topnav">
   <a class="active" href="home.php">Manager Home Screen</a>
-  <a href="inventory.html">Inventory Managemnet Screen</a>
-  <a href="sales_management.html">Sales Management Screen</a>
-  <a href="sales_analytics.html">Sales Analytics Screen</a>
+  <a href="inventory.php">Inventory Managemnet Screen</a>
+  <a href="sales_management.php">Sales Management Screen</a>
+  <a href="sales_analytics.php">Sales Analytics Screen</a>
   <a href="cash_register.php">CashRegister Screen</a>
-  <a href="login.html" style="float:right">Logout</a>
+  <a href="login.php" style="float:right">Logout</a>
 </div>
 
 <div class="row">
@@ -61,6 +61,7 @@
 		itemCategory Varchar(50) NOT NULL,
 		itemPrice DECIMAL(10, 2) NOT NULL,
 		stock INT NOT NULL,
+		hidden bool NOT NULL DEFAULT false,
 		PRIMARY KEY (itemID)
 	);';
 	

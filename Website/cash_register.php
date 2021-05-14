@@ -12,11 +12,11 @@
 
 <div class="topnav">
   <a href="home.php">Manager Home Screen</a>
-  <a href="inventory.html">Inventory Managemnet Screen</a>
-  <a href="sales_management.html">Sales Management Screen</a>
-  <a href="sales_analytics.html">Sales Analytics Screen</a>
+  <a href="inventory.php">Inventory Managemnet Screen</a>
+  <a href="sales_management.php">Sales Management Screen</a>
+  <a href="sales_analytics.php">Sales Analytics Screen</a>
   <a class="active" href="cash_register.php">CashRegister Screen</a>
-  <a href="login.html" style="float:right">Logout</a>
+  <a href="login.php" style="float:right">Logout</a>
 </div>
 
 <div><h1 style="text-align: center">REGISTER</h1></div>
@@ -36,9 +36,6 @@
 	</select>
 	<button name="btnSearch" class="search" type="submit" value="true"><img src="Rescources/search.png" width="15" height="15"></button>
 </form>
-
-
-
 
 <table id="stock_list">
   <tr>
@@ -71,14 +68,16 @@
 			$output = mysqli_query($conn, $input);
 			$i = 0;
 			while ($row = mysqli_fetch_assoc($output)) {
-				echo "<tr class='tuple'>";
-				echo "<td>", $row['itemName'], "</td>";
-				echo "<td>", $row['itemID'], "</td>";
-				echo "<td>", $row['itemCategory'], "</td>";
-				echo "<td>", $row['itemPrice'], "</td>";
-				echo "<td>", $row['stock'], "</td>";
-				echo "<td><input type='number' min='-99' max='99' style='float:right'></td>";
-				echo "</tr>";
+				if ($row['hidden'] == false) {
+					echo "<tr class='tuple'>";
+					echo "<td>", $row['itemName'], "</td>";
+					echo "<td>", $row['itemID'], "</td>";
+					echo "<td>", $row['itemCategory'], "</td>";
+					echo "<td>", $row['itemPrice'], "</td>";
+					echo "<td>", $row['stock'], "</td>";
+					echo "<td><input type='number' min='-99' max='99' style='float:right'></td>";
+					echo "</tr>";
+				}
 			}
 		}
 	  ?>
@@ -107,7 +106,7 @@
 					<td></td>
 					<td></td>
 					<td></td>
-					<td><strong>Total: $0.00</strong></td>
+					<td id="totalPriceValue"><strong>Total: $0.00 </strong></td>
 					<td></td>
 					<td></td>
 				</tr>
@@ -119,21 +118,16 @@
 </div>
 
 <?php
-	//Add second field that confirms that input is valid
-	if(isset($_POST['btnSell']) && isset($_POST['validSale'])) {
-		//echo "<p>Post detected</p>";
+	//Check for sale submissions
+	if(isset($_POST['btnSell'])) {
+		//echo "<p>Trigger sell function</p>";
 		Sell();
 	}
-	
-	// if(isset($_POST['btnSell'])) {
-		// echo "<p>Simplied post detected</p>";
-		// //Sell();
-	// }
 	
 	function Sell() {
 		//Read in post results as a MySQL add record query for every row.
 		//Send cusName, ID, single price, quantity and current date
-		//Generate a recipte number (check the db for
+		//Generate a recipte number
 		date_default_timezone_set('Australia/Melbourne');
 		$date = date('y/m/d', time());
 		$customerName = $_POST['custName'];
@@ -155,7 +149,7 @@
 		//echo "<p>", $query, "</p>";
 		
 		for ($i = 0; $i < $_POST['txtLength'] + 0; $i++) {
-			
+			//echo "<p>", $i, "</p>";
 			$id = $_POST["id_" . $i];
 			$quantity = $_POST['quantity_' . $i];
 			$price = $_POST['price_' . $i];
@@ -164,10 +158,13 @@
 			($receiptID, $id, $quantity, $price);";
 			
 			mysqli_query($conn, $query);
+			
+			//echo "<p>", $query, "</p>";
 		}
-		
+		//Commit changes
 		mysqli_query($conn, 'COMMIT;');
-		//Process sell
+		
+		//echo "<p>Finish commit</p>";
 	}
 ?>
 
