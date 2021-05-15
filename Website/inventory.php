@@ -106,13 +106,58 @@
   
   <div class="rightcolumn">
     <div class="card">
-<h2>ADD/EDIT STOCK ITEM</h2>
+		<h2>ADD/EDIT STOCK ITEM</h2>
 
- <p>ITEM: <input type="text" id="inpName" name="fname" value="ID"></p> 
- <p>ID: <input type="text" id="inpID" name="fname" value="###"></p> 
- <p>PRICE: <input type="text" id="inpPrice" name="fname" value="ID"></p> 
- <p>CATEGORY: <input type="text" id="inpCategory" name="fname" value="###"></p> 
-<p><button class="button button1" onclick="alert('Hello world!')">UPDATE</button></p>
+		<form method="post">
+		 <p>ITEM: <input type="text" id="inpName" name="inpName"></p> 
+		 <p>ID: <input type="number" id="inpID" name="inpID"></p> 
+		 <p>PRICE: <input type="number" id="inpPrice" name="inpPrice"></p> 
+		 <p>CATEGORY: <input type="text" id="inpCategory" name="inpCategory"></p> 
+		<p><button type="submit" class="button button1" name="btnUpdate">UPDATE</button></p>
+		</form>
+		
+		<?php
+			if(isset($_POST['btnUpdate'])) {
+				echo "<p>Call Update</p>";
+				UpdateDB();
+			}
+			
+			function UpdateDB() {
+				require_once("settings.php");
+				$conn = @mysqli_connect($host, $user, $pwd, $dbname);
+				
+				$name = $_POST['inpName'];
+				$id = $_POST['inpID'];
+				$price = $_POST['inpPrice'];
+				$category = $_POST['inpCategory'];
+				
+				$query = "SELECT EXISTS (SELECT 1 FROM items WHERE itemID = $id) as exists_flag;";
+				$output = mysqli_query($conn, $query);
+				
+				$output = mysqli_fetch_assoc($output);
+				
+				//Check if item already exists
+				if ($output == 0) {
+					$query = "INSERT INTO items (itemName, itemCategory, itemPrice) VALUES ($name, $category, $price)";
+				}
+				else {
+					if ($name != "") {
+						$query = "UPDATE items SET itemName = $name WHERE itemID = $id;";
+						mysqli_query($conn, $query);
+					}
+					if ($price != "") {
+						$query = "UPDATE items SET itemPrice = $price WHERE itemID = $id;";
+						mysqli_query($conn, $query);
+					}
+					if ($category != "") {
+						$query = "UPDATE items SET itemPrice = $price WHERE itemID = $id;";
+						mysqli_query($conn, $query);
+					}
+				}
+				
+				mysqli_query($conn, 'COMMIT;');
+			}
+		  ?>
     </div>
   </div>
 </div>
