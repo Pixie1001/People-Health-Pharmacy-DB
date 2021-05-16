@@ -10,11 +10,11 @@
 </div>
 
 <div class="topnav">
-  <a href="home.php">Manager Home Screen</a>
+  <a class="active" href="home.php">Manager Home Screen</a>
   <a href="inventory.php">Inventory Managemnet Screen</a>
   <a href="sales_management.php">Sales Management Screen</a>
   <a href="sales_analytics.php">Sales Analytics Screen</a>
-  <a class="active" href="cash_register.php">CashRegister Screen</a>
+  <a href="cash_register.php">CashRegister Screen</a>
   <a href="login.php" style="float:right">Logout</a>
 </div>
 
