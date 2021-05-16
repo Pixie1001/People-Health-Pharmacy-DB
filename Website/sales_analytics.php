@@ -2,6 +2,8 @@
 <html>
 <head>
  <link rel="stylesheet" href="style.css">
+ <script src="https://cdn.jsdelivr.net/npm/chart.js">
+ </script>
 </head>
 <body>
 
@@ -10,12 +12,12 @@
 </div>
 
 <div class="topnav">
-  <a href="home.php">Manager Home Screen</a>
-  <a href="inventory.php">Inventory Managemnet Screen</a>
-  <a href="sales_management.php">Sales Management Screen</a>
-  <a class="active" href="sales_analytics.php">Sales Analytics Screen</a>
-  <a href="cash_register.php">CashRegister Screen</a>
-  <a href="login.php" style="float:right">Logout</a>
+  <a href="home.html">Manager Home Screen</a>
+  <a href="inventory.html">Inventory Managemnet Screen</a>
+  <a href="sales_management.html">Sales Management Screen</a>
+  <a class="active" href="sales_analytics.html">Sales Analytics Screen</a>
+  <a href="cash_register.html">CashRegister Screen</a>
+  <a href="login.html" style="float:right">Logout</a>
 </div>
 
 <div><h1 style="text-align: center">INVENTORY</h1></div>
@@ -23,60 +25,71 @@
 <div class="row">
   <div class="leftcolumn">
     <div class="card">
-<h2>STOCK</h2>
-<h3 class="search" >SEARCH:</h3>
-<input class="search" type="text" id="fname" name="fname">
-<label class="search" for="cars">type:</label>
-  <select name="cars" id="cars">
-    <option value="item_name">Name</option>
-    <option value="item_id">ID</option>
-    <option value="item_category">Category</option>
+<h2>SALES</h2>
+  <h3>SEARCH:</h3>
+<label for="item">Category:</label>
+  <select name="item" id="item">
+    <option value="item_name">All</option>
+    <option value="item_id">Creams</option>
+    <option value="item_category">Wipes</option>
+	 <option value="item_category">Lotions</option>
   </select>
-<button class="search" type="button" onclick="alert('you searched something!')"><img src="Rescources/search.png" width="15" height="15"></button>
+    <br></br>
+	<label for="start">Start date:</label>
 
-<table>
-  <tr>
-    <th>Name</th>
-    <th>ID</th>
-    <th>CATEGORY</th>
-	<th>PRICE</th>
-    <th>REMAINING STOCK</th>
-	<th><p style="float:right" >QUANTITY</p></th>
-	<th></th>
-  </tr>
-  <tr>
-    <td>Fungal Cream</td>
-    <td>FC</td>
-    <td>Creams</td>
-	<td>$30</td>
-	<td>12</td>
-	<td> <input type="text" style="float:right" id="fname" name="fname"></td>
-	<td><button class="search" type="button" onclick="alert('you searched something!')"><img src="Rescources/edit.png" width="30" height="30"></button></td>
-  </tr>
-  <tr>
-    <td>Lip Cream</td>
-    <td>LC</td>
-    <td>Creams</td>
-	<td>$80</td>
-	<td>3</td>
-	<td><input type="text"  style="float:right" id="fname" name="fname"></td>
-	<td><button class="search" type="button" onclick="alert('you searched something!')"><img src="Rescources/edit.png" width="30" height="30"></button></td>
-  </tr>
-</table>
-<p><button class="button button1" style="float:right" onclick="alert('Removed!')">REMOVE</button></p>
-<p><button class="button button1" style="float:right" onclick="alert('Added!')">ADD</button></p>
-    </div>
+		<input type="date" id="start" name="start"
+       value="2018-07-22"
+       min="2018-01-01" max="2018-12-31">
+	   
+	  <br></br>
+	   <label for="start">End date:</label>
+
+		<input type="date" id="start" name="end"
+       value="2018-07-22"
+       min="2018-01-01" max="2018-12-31">
+	   
+	     <p>(If Blank Will Search All Items)</p>
+	<input type="text" id="fname" name="fname">
+	<button type="button" onclick="alert('you searched something!')"><img src="Rescources/search.png" width="15" height="15"></button>
+	
+	</div>
   </div>
   
   <div class="rightcolumn">
     <div class="card">
-<h2>ADD/EDIT STOCK ITEM</h2>
-
- <p>ITEM: <input type="text" id="fname" name="fname" value="ID"></p> 
- <p>ID: <input type="text" id="fname" name="fname" value="###"></p> 
- <p>PRICE: <input type="text" id="fname" name="fname" value="ID"></p> 
- <p>CATEGORY: <input type="text" id="fname" name="fname" value="###"></p> 
-<p><button class="button button1" onclick="alert('You Updated the Table!')">UPDATE</button></p>
+			<div>
+			<canvas id="myChart"></canvas>
+			</div>
+	
+	<canvas id="myChart" width="400" height="0"></canvas>
+<script>
+var ctx = document.getElementById('myChart').getContext('2d');
+var myChart = new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+            backgroundColor: [
+                'rgba(255, 99, 132, 0.2)',
+            ],
+            borderColor: [
+                'rgba(255, 99, 132, 1)',
+            ],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }PPOGO
+        }
+    }
+});
+</script>
+			
     </div>
   </div>
 </div>
