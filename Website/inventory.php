@@ -111,14 +111,14 @@
 		<form method="post">
 		 <p>ITEM: <input type="text" id="inpName" name="inpName"></p> 
 		 <p>ID: <input type="number" id="inpID" name="inpID"></p> 
-		 <p>PRICE: <input type="number" id="inpPrice" name="inpPrice"></p> 
+		 <p>PRICE: <input type="number" step=".01" id="inpPrice" name="inpPrice"></p> 
 		 <p>CATEGORY: <input type="text" id="inpCategory" name="inpCategory"></p> 
 		<p><button type="submit" class="button button1" name="btnUpdate">UPDATE</button></p>
 		</form>
 		
 		<?php
 			if(isset($_POST['btnUpdate'])) {
-				echo "<p>Call Update</p>";
+				//echo "<p>Call Update</p>";
 				UpdateDB();
 			}
 			
@@ -131,27 +131,41 @@
 				$price = $_POST['inpPrice'];
 				$category = $_POST['inpCategory'];
 				
-				$query = "SELECT EXISTS (SELECT 1 FROM items WHERE itemID = $id) as exists_flag;";
-				$output = mysqli_query($conn, $query);
-				
-				$output = mysqli_fetch_assoc($output);
+				if ($id != "") {
+					$query = "SELECT EXISTS (SELECT 1 FROM items WHERE itemID = $id) as exists_flag;";
+					$output = mysqli_query($conn, $query);
+					$output = mysqli_fetch_assoc($output)['exists_flag'];
+				}
+				else {
+					$output = 0;
+				}
 				
 				//Check if item already exists
 				if ($output == 0) {
-					$query = "INSERT INTO items (itemName, itemCategory, itemPrice) VALUES ($name, $category, $price)";
+					if ($name == "" || $price == "" || $category == "") {
+						echo "<p style='color: red;'>Error: Please ensure the name, price and category of your new item is populated before it is submitted to the database!</p>";
+					}
+					else {
+						$query = "INSERT INTO items (itemName, itemCategory, itemPrice) VALUES ('$name', '$category', $price);";
+						mysqli_query($conn, $query);
+						//echo "<p>$query</p>";
+					}
 				}
 				else {
 					if ($name != "") {
-						$query = "UPDATE items SET itemName = $name WHERE itemID = $id;";
+						$query = "UPDATE items SET itemName = '$name' WHERE itemID = $id;";
 						mysqli_query($conn, $query);
+						//echo "<p>$query</p>";
 					}
 					if ($price != "") {
 						$query = "UPDATE items SET itemPrice = $price WHERE itemID = $id;";
 						mysqli_query($conn, $query);
+						//echo "<p>$query</p>";
 					}
 					if ($category != "") {
-						$query = "UPDATE items SET itemPrice = $price WHERE itemID = $id;";
+						$query = "UPDATE items SET itemCategory = '$category' WHERE itemID = $id;";
 						mysqli_query($conn, $query);
+						//echo "<p>$query</p>";
 					}
 				}
 				
