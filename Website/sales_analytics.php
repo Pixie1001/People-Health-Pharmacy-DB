@@ -58,10 +58,11 @@
   <div class="rightcolumn">
     <div class="card">
 			<div>
-			<canvas id="myChart"></canvas>
+			<canvas id="myChart"></canvas>	
 			</div>
 	
 	<canvas id="myChart" width="400" height="0"></canvas>
+	
 <script>
 var ctx = document.getElementById('myChart').getContext('2d');
 var myChart = new Chart(ctx, {
@@ -96,6 +97,43 @@ var myChart = new Chart(ctx, {
 
 <div class="footer">
   <p>omicron turtle™</p>
+  
+  		  <?php
+		if(isset($_POST['btnSearch']) && isset($_POST['txtSearch']) && isset($_POST['drpType'])) {
+            Query($_POST['txtSearch'], $_POST['drpType']);
+        }
+		
+		function Query($search, $type) {
+			require_once("settings.php");
+			$conn = @mysqli_connect($host, $user, $pwd, $dbname);
+			switch ($type) {
+				case 'item_name':
+					$input = "SELECT * FROM items WHERE itemName RLIKE '$search'";
+					break;
+				case 'item_id':
+					$input = "SELECT * FROM items WHERE itemID RLIKE '$search'";
+					break;
+				case 'item_category':
+					$input = "SELECT * FROM items WHERE itemCategory RLIKE '$search'";
+					break;
+			}
+			$output = mysqli_query($conn, $input);
+			$i = 0;
+			while ($row = mysqli_fetch_assoc($output)) {
+				if ($row['hidden'] == false) {
+					echo "<tr class='tuple'>";
+					echo "<p>", $row['itemName'], "</p>";
+					echo "<p>", $row['itemID'], "</p>";
+					echo "<p>", $row['itemCategory'], "</p>";
+					echo "<p>", $row['itemPrice'], "</p>";
+					echo "<p>", $row['stock'], "</p>";
+					echo "<p><input type='number' min='-99' max='99' style='float:right'></p>";
+					echo "</tr>";
+				}
+			}
+		}
+	  ?>
+  
 </div>
 
 </body>
