@@ -17,7 +17,7 @@
   <a href="sales_management.php">Sales Management Screen</a>
   <a class="active" href="sales_analytics.php">Sales Analytics Screen</a>
   <a href="cash_register.php">CashRegister Screen</a>
-  <a href="login.php" style="float:right">Logout</a>
+  <a href="index.php" style="float:right">Logout</a>
 </div>
 
 <div><h1 style="text-align: center">ANALYTICS</h1></div>
